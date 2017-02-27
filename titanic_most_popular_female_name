@@ -1,0 +1,28 @@
+    # Какое самое популярное женское имя на корабле?
+    # Извлеките из полного имени пассажира (колонка Name) его личное имя (First Name).
+    # Это задание — типичный пример того, с чем сталкивается специалист по анализу данных.
+    # Данные очень разнородные и шумные, но из них требуется извлечь необходимую информацию.
+    # Попробуйте вручную разобрать несколько значений столбца Name и
+    # выработать правило для извлечения имен, а также разделения их на женские и мужские.
+
+import pandas
+
+if __name__ == '__main__':
+
+  data = pandas.read_csv('D:\\Coursera\\ML\\Yandex_ML\\titanic.csv', index_col='PassengerId')
+
+  sex_row = data['Sex']
+  name_row = data['Name']
+  names_list =[]
+
+  for s_row, n_row in zip(sex_row, name_row):
+      if 'female' in s_row:
+          names = n_row.split('.')[-1]
+          if '(' in names:
+              names = names.replace(')', "").split('(')[-1].split(' ')[0]
+              names_list.append(names)
+          else:
+              names_list.append(names.lstrip(' ').split(' ')[0])
+
+  names_list_pandas = pandas.DataFrame(names_list)
+  names_list_pandas[0].value_counts()
